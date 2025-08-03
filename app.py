@@ -3,8 +3,15 @@ import numpy as np
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 from PIL import Image
+import gdown
+import os
 
-# Cargar el modelo (asegúrate que el archivo .h5 esté en el mismo repo)
+# Descargar el modelo desde Google Drive si no está presente
+if not os.path.exists("resnet50_binary_classifier_final.h5"):
+    url = "https://drive.google.com/uc?id=1tGYr4EWuO0mAQNh9LB6q0w2pzdYT4WaQ" 
+    gdown.download(url, "resnet50_binary_classifier_final.h5", quiet=False)
+
+# Cargar el modelo
 model = load_model("resnet50_binary_classifier_final.h5")
 
 # Interfaz
@@ -28,3 +35,4 @@ if uploaded_file is not None:
     resultado = "Con retinopatía" if pred[0][0] > 0.5 else "Sin retinopatía"
 
     st.subheader(f"Resultado: {resultado}")
+
