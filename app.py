@@ -12,7 +12,7 @@ if not os.path.exists("resnet50_binary_classifier_final.h5"):
     gdown.download(url, "binary_classifier_final.h5", quiet=False)
 
 # Cargar el modelo
-model = load_model("resnet50_binary_classifier_final.h5")
+model = load_model("binary_classifier_final.h5")
 
 # Interfaz
 st.title("Detector de Retinopatía")
@@ -35,6 +35,7 @@ if uploaded_file is not None:
     resultado = "Con retinopatía" if pred[0][0] > 0.5 else "Sin retinopatía"
 
     st.subheader(f"Resultado: {resultado}")
+
 
 
 
