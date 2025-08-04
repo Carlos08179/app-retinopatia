@@ -7,7 +7,7 @@ import gdown
 import os
 
 # Descargar el modelo desde Google Drive si no está presente
-if not os.path.exists("resnet50_binary_classifier_final.h5"):
+if not os.path.exists("binary_classifier_final.h5"):
     url = "https://drive.google.com/uc?id=1tGYr4EWuO0mAQNh9LB6q0w2pzdYT4WaQ" 
     gdown.download(url, "binary_classifier_final.h5", quiet=False)
 
@@ -35,6 +35,7 @@ if uploaded_file is not None:
     resultado = "Con retinopatía" if pred[0][0] > 0.5 else "Sin retinopatía"
 
     st.subheader(f"Resultado: {resultado}")
+
 
 
 
