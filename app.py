@@ -3,16 +3,21 @@ import numpy as np
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 from PIL import Image
-import gdown
+import requests
 import os
 
-# Descargar el modelo desde Google Drive si no está presente
-if not os.path.exists("binary_classifier_final.h5"):
-    url = "https://drive.google.com/uc?id=1tGYr4EWuO0mAQNh9LB6q0w2pzdYT4WaQ" 
-    gdown.download(url, "binary_classifier_final.h5", quiet=False)
+# Descargar el modelo desde Dropbox si no está presente
+model_path = "binary_classifier_final.h5"
+if not os.path.exists(model_path):
+    url = "https://www.dropbox.com/scl/fi/akxu070jfv0og7b9pmks7/binary_classifier_final.h5?rlkey=d05akpuon45os716lcg9cral9&st=z9nkaq9b&dl=1"
+    with requests.get(url, stream=True) as r:
+        r.raise_for_status()
+        with open(model_path, "wb") as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                f.write(chunk)
 
 # Cargar el modelo
-model = load_model("binary_classifier_final.h5")
+model = load_model(model_path)
 
 # Interfaz
 st.title("Detector de Retinopatía")
@@ -26,7 +31,7 @@ if uploaded_file is not None:
     st.image(img, caption="Imagen cargada", use_column_width=True)
 
     # Preprocesar imagen
-    img = img.resize((224, 224))  # Ajusta al tamaño usado en tu ResNet50
+    img = img.resize((224, 224))  # Ajusta al tamaño usado en tu modelo
     img_array = np.array(img) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
 
@@ -35,8 +40,6 @@ if uploaded_file is not None:
     resultado = "Con retinopatía" if pred[0][0] > 0.5 else "Sin retinopatía"
 
     st.subheader(f"Resultado: {resultado}")
-
-
 
 
 
