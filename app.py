@@ -37,3 +37,4 @@ if uploaded_file is not None:
     st.subheader(f"Resultado: {resultado}")
 
 
+
